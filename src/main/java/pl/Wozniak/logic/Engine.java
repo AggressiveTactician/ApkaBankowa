@@ -2,20 +2,21 @@ package pl.Wozniak.logic;
 
 import pl.Wozniak.model.Account;
 import pl.Wozniak.model.User;
+import pl.Wozniak.userList;
 
 import java.util.Scanner;
 
 public class Engine {
 
-    private User[] users = new User[10];
+    private userList userList = new userList();
 
     public void launch() {
         System.out.println("Witamy w naszym banku X");
         System.out.println("Podaj swój login: ");
         Scanner scanner = new Scanner(System.in);
-        numberGenerator generator = new numberGenerator(users);
+        numberGenerator generator = new numberGenerator(userList.getAll());
         String login = scanner.next();
-        User checkUser = findUser(login);
+        User checkUser = userList.findUser(login);
         if (checkUser == null) {
             System.out.println("Loginu nie znaleziono. Utworzono nowe konto");
             User newUser = newUser(generator, login);
@@ -32,12 +33,7 @@ public class Engine {
     }
 
     private void addUser(User newUser) {
-        for (int i = 0; i < users.length; i++) {
-            if (users[i] == null) {
-                users[i] = newUser;
-                break;
-            }
-        }
+        userList.addUser(newUser);
     }
 
     private Account createAccount(numberGenerator generator) {
@@ -47,19 +43,8 @@ public class Engine {
         return newAccount;
     }
 
-    private User findUser(String login) {
-        User checkUser = null;
-        for (User user : users) {
-            if (user != null && login.equals(user.getLogin())) {
-                checkUser = user;
-                break;
-            }
-        }
-        return checkUser;
-    }
-
     public void printUsers() {
-        for (User user : users) {
+        for (User user : userList.getAll()) {
             System.out.println(user);
         }
     }
